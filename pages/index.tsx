@@ -80,7 +80,7 @@ const Home: NextPage<HomeProps> = ({ database }) => {
                                     handleClick(e, id);
                                 }}
                             >
-                                {/* <Link href={`/posts/${id}`}>Link</Link> */}
+                                <Link href={`/posts/${id}`}>Link</Link>
                                 <h1>{name?.title[0].text.content}</h1>
                                 <p>
                                     {new Date(createdTime).toLocaleString('ko')}
