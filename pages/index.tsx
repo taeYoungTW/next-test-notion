@@ -12,7 +12,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         auth: process.env.NOTION_API_KEY,
     });
     const myDatabase = await notion.databases.query({
-        database_id: '3a28ac5f17214860a01d4af3b3c42dea',
+        database_id: process.env.NOTION_DB_ID as string,
     });
     const database = myDatabase.results.map((page) => {
         if (!('properties' in page)) return;
@@ -48,6 +48,7 @@ const Home: NextPage<HomeProps> = ({ database }) => {
             console.error(error);
         }
     };
+
     return (
         <div className={styles.container}>
             <Head>

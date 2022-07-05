@@ -24,14 +24,19 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }: { params: any }) => {
     const notion = new Client({ auth: process.env.NOTION_API_KEY });
-    const post = await notion.blocks.children.list({
-        block_id: params.id,
-        page_size: 50,
-    });
-    const res = post.results.map((block: any) => ({
-        text: block[block.type].rich_text[0].text.content,
-    }));
-    return { props: { post: res } };
+    try {
+        const post = await notion.blocks.children.list({
+            block_id: params.id,
+            page_size: 50,
+        });
+        const res = post.results.map((block: any) => ({
+            text: block[block.type].rich_text[0].text.content,
+        }));
+
+        return { props: { post: res } };
+    } catch (error) {
+        return { props: { post: null }, notFound: true };
+    }
 };
 
 const Post = ({ post }: { post: any }) => {
