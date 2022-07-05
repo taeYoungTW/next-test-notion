@@ -4,51 +4,76 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { MouseEvent } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { revalidateGET } from '../services/revalidate';
 import styles from '../styles/Home.module.css';
 
-export const getStaticProps: GetStaticProps = async (context) => {
-    const notion = new Client({
-        auth: process.env.NOTION_API_KEY,
-    });
-    const myDatabase = await notion.databases.query({
-        database_id: process.env.NOTION_DB_ID as string,
-    });
-    const database = myDatabase.results.map((page) => {
-        if (!('properties' in page)) return;
-        const { id, created_time: createdTime, properties, url } = page;
-        return {
-            id,
-            createdTime,
-            tag: properties['태그'],
-            name: properties['이름'],
-            url,
-        };
-    });
+// export const getStaticProps: GetStaticProps = async (context) => {
+//     const notion = new Client({
+//         auth: process.env.NOTION_API_KEY,
+//     });
+//     const myDatabase = await notion.databases.query({
+//         database_id: process.env.NOTION_DB_ID as string,
+//     });
+//     const database = myDatabase.results.map((page) => {
+//         if (!('properties' in page)) return;
+//         const { id, created_time: createdTime, properties, url } = page;
+//         return {
+//             id,
+//             createdTime,
+//             tag: properties['태그'],
+//             name: properties['이름'],
+//             url,
+//         };
+//     });
 
-    return {
-        props: { database },
-    };
-};
+//     return {
+//         props: { database },
+//     };
+// };
 
-interface HomeProps {
-    database: any[];
-}
+// interface HomeProps {
+//     database: any[];
+// }
 
-const Home: NextPage<HomeProps> = ({ database }) => {
+const Home: NextPage = () => {
     const router = useRouter();
+    const [database, setDatabase] = useState<any[]>([]);
 
     const handleClick = (e: MouseEvent, id: string) => {
         router.push({ pathname: '/posts/[id]', query: { id } });
     };
-    const handleRevalidateClick = async () => {
-        try {
-            await revalidateGET({});
-        } catch (error) {
-            console.error(error);
-        }
-    };
+
+    // const handleRevalidateClick = async () => {
+    //     try {
+    //         await revalidateGET({});
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
+
+    useEffect(() => {
+        (async () => {
+            const notion = new Client({
+                auth: process.env.NOTION_API_KEY,
+            });
+            const myDatabase = await notion.databases.query({
+                database_id: process.env.NOTION_DB_ID as string,
+            });
+            const database = myDatabase.results.map((page) => {
+                if (!('properties' in page)) return;
+                const { id, created_time: createdTime, properties, url } = page;
+                return {
+                    id,
+                    createdTime,
+                    tag: properties['태그'],
+                    name: properties['이름'],
+                    url,
+                };
+            });
+            setDatabase(database);
+        })();
+    }, []);
 
     return (
         <div className={styles.container}>
@@ -67,7 +92,7 @@ const Home: NextPage<HomeProps> = ({ database }) => {
                 <p className={styles.description}>
                     This API get my page of notion!
                 </p>
-                <button onClick={handleRevalidateClick}>Revalidate Home</button>
+                {/* <button onClick={handleRevalidateClick}>Revalidate Home</button> */}
 
                 <div className={styles.grid}>
                     {database?.map(({ id, createdTime, tag, name, url }) => {
@@ -79,7 +104,7 @@ const Home: NextPage<HomeProps> = ({ database }) => {
                                     handleClick(e, id);
                                 }}
                             >
-                                {/* <Link href={`/posts/${id}`}>Link</Link> */}
+                                <Link href={`/posts/${id}`}>Link</Link>
                                 <h1>{name?.title[0].text.content}</h1>
                                 <p>
                                     {new Date(createdTime).toLocaleString('ko')}
