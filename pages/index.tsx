@@ -29,7 +29,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     return {
         props: { database },
-        revalidate: 10,
     };
 };
 

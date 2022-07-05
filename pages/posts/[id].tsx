@@ -33,7 +33,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
             text: block[block.type].rich_text[0].text.content,
         }));
 
-        return { props: { post: res }, revalidate: 10 };
+        return { props: { post: res } };
     } catch (error) {
         return { props: { post: null }, notFound: true };
     }
