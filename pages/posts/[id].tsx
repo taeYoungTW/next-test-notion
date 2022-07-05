@@ -1,9 +1,9 @@
 import { Client } from '@notionhq/client';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { revalidateGET } from '../../services/revalidate';
 
 export const getStaticPaths = async () => {
-    console.log('Run: getStaticPaths');
     const notion = new Client({
         auth: process.env.NOTION_API_KEY,
     });
@@ -31,18 +31,27 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     const res = post.results.map((block: any) => ({
         text: block[block.type].rich_text[0].text.content,
     }));
-    return { props: { post: res }, revalidate: 10 };
+    return { props: { post: res } };
 };
 
 const Post = ({ post }: { post: any }) => {
     const router = useRouter();
     const { id } = router.query;
+    const handleRevalidateClick = async () => {
+        try {
+            await revalidateGET({ id: id as string });
+        } catch (error) {
+            console.error(error);
+        }
+    };
     return (
         <div>
             <h1>Page id: {id}</h1>
+            <button onClick={handleRevalidateClick}>Revalidate</button>
             {post.map(({ text }: any) => (
                 <h3 key={text}>{text}</h3>
             ))}
+            <Link href={'/'}>Home</Link>
         </div>
     );
 };
