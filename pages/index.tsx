@@ -2,6 +2,7 @@ import { Client } from '@notionhq/client';
 import type { GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { MouseEvent } from 'react';
 // import { revalidateGET } from '../services/revalidate';
@@ -79,6 +80,7 @@ const Home: NextPage<HomeProps> = ({ database }) => {
                                     handleClick(e, id);
                                 }}
                             >
+                                <Link href={`/posts/${id}`}>Link</Link>
                                 <h1>{name?.title[0].text.content}</h1>
                                 <p>
                                     {new Date(createdTime).toLocaleString('ko')}
