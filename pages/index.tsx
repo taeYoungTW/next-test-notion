@@ -4,7 +4,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { MouseEvent } from 'react';
-import { revalidateGET } from '../services/revalidate';
+// import { revalidateGET } from '../services/revalidate';
 import styles from '../styles/Home.module.css';
 
 export const getStaticProps: GetStaticProps = async (context) => {
@@ -28,6 +28,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     return {
         props: { database },
+        revalidate: 10,
     };
 };
 
@@ -41,13 +42,13 @@ const Home: NextPage<HomeProps> = ({ database }) => {
     const handleClick = (e: MouseEvent, id: string) => {
         router.push({ pathname: '/posts/[id]', query: { id } });
     };
-    const handleRevalidateClick = async () => {
-        try {
-            await revalidateGET({});
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    // const handleRevalidateClick = async () => {
+    //     try {
+    //         await revalidateGET({});
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
 
     return (
         <div className={styles.container}>
@@ -66,7 +67,7 @@ const Home: NextPage<HomeProps> = ({ database }) => {
                 <p className={styles.description}>
                     This API get my page of notion!
                 </p>
-                <button onClick={handleRevalidateClick}>Revalidate Home</button>
+                {/* <button onClick={handleRevalidateClick}>Revalidate Home</button> */}
 
                 <div className={styles.grid}>
                     {database?.map(({ id, createdTime, tag, name, url }) => {

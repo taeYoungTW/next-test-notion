@@ -1,7 +1,7 @@
 import { Client } from '@notionhq/client';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { revalidateGET } from '../../services/revalidate';
+// import { revalidateGET } from '../../services/revalidate';
 
 export const getStaticPaths = async () => {
     const notion = new Client({
@@ -33,7 +33,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
             text: block[block.type].rich_text[0].text.content,
         }));
 
-        return { props: { post: res } };
+        return { props: { post: res }, revalidate: 10 };
     } catch (error) {
         return { props: { post: null }, notFound: true };
     }
@@ -42,17 +42,17 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 const Post = ({ post }: { post: any }) => {
     const router = useRouter();
     const { id } = router.query;
-    const handleRevalidateClick = async () => {
-        try {
-            await revalidateGET({ id: id as string });
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    // const handleRevalidateClick = async () => {
+    //     try {
+    //         await revalidateGET({ id: id as string });
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
     return (
         <div>
             <h1>Page id: {id}</h1>
-            <button onClick={handleRevalidateClick}>Revalidate</button>
+            {/* <button onClick={handleRevalidateClick}>Revalidate</button> */}
             {post.map(({ text }: any) => (
                 <h3 key={text}>{text}</h3>
             ))}
