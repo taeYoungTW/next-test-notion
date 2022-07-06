@@ -1,7 +1,7 @@
 import { Client } from '@notionhq/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const notion = new Client({
             auth: process.env.NOTION_API_KEY,
@@ -25,3 +25,5 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(500).send('Error notion');
     }
 };
+
+export default handler;

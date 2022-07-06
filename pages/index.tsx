@@ -1,11 +1,10 @@
-import { Client } from '@notionhq/client';
-import type { GetStaticProps, NextPage } from 'next';
+import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { MouseEvent, useEffect, useState } from 'react';
-import { revalidateGET } from '../services/revalidate';
+// import { revalidateGET } from '../services/revalidate';
 import styles from '../styles/Home.module.css';
 
 // export const getStaticProps: GetStaticProps = async (context) => {
@@ -39,6 +38,7 @@ import styles from '../styles/Home.module.css';
 const Home: NextPage = () => {
     const router = useRouter();
     const [database, setDatabase] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleClick = (e: MouseEvent, id: string) => {
         router.push({ pathname: '/posts/[id]', query: { id } });
@@ -54,9 +54,11 @@ const Home: NextPage = () => {
 
     useEffect(() => {
         (async () => {
+            setIsLoading(true);
             const res = await fetch('/api/notion');
             const result = await res.json();
             setDatabase(result);
+            setIsLoading(false);
         })();
     }, []);
 
@@ -79,47 +81,58 @@ const Home: NextPage = () => {
                 </p>
                 {/* <button onClick={handleRevalidateClick}>Revalidate Home</button> */}
 
-                <div className={styles.grid}>
-                    {database?.map(({ id, createdTime, tag, name, url }) => {
-                        return name?.title[0]?.text ? (
-                            <div
-                                key={id}
-                                className={styles.card}
-                                onClick={(e) => {
-                                    handleClick(e, id);
-                                }}
-                            >
-                                <Link href={`/posts/${id}`}>Link</Link>
-                                <h1>{name?.title[0].text.content}</h1>
-                                <p>
-                                    {new Date(createdTime).toLocaleString('ko')}
-                                </p>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        gap: '10px',
-                                        padding: '10px',
-                                    }}
-                                >
-                                    {tag.multi_select.map((item: any) => (
-                                        <span
-                                            className={styles.tag}
+                {isLoading ? (
+                    <div>Loading...</div>
+                ) : (
+                    <div className={styles.grid}>
+                        {database?.map(
+                            ({ id, createdTime, tag, name, url }) => {
+                                return name?.title[0]?.text ? (
+                                    <div
+                                        key={id}
+                                        className={styles.card}
+                                        onClick={(e) => {
+                                            handleClick(e, id);
+                                        }}
+                                    >
+                                        <Link href={`/posts/${id}`}>Link</Link>
+                                        <h1>{name?.title[0].text.content}</h1>
+                                        <p>
+                                            {new Date(
+                                                createdTime
+                                            ).toLocaleString('ko')}
+                                        </p>
+                                        <div
                                             style={{
-                                                backgroundColor: item.color,
-                                                padding: '3px',
-                                                borderRadius: '2px',
-                                                color: 'black',
+                                                display: 'flex',
+                                                gap: '10px',
+                                                padding: '10px',
                                             }}
-                                            key={item.id}
                                         >
-                                            {item.name}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        ) : null;
-                    })}
-                </div>
+                                            {tag.multi_select.map(
+                                                (item: any) => (
+                                                    <span
+                                                        className={styles.tag}
+                                                        style={{
+                                                            backgroundColor:
+                                                                item.color,
+                                                            padding: '3px',
+                                                            borderRadius: '2px',
+                                                            color: 'black',
+                                                        }}
+                                                        key={item.id}
+                                                    >
+                                                        {item.name}
+                                                    </span>
+                                                )
+                                            )}
+                                        </div>
+                                    </div>
+                                ) : null;
+                            }
+                        )}
+                    </div>
+                )}
             </main>
 
             <footer className={styles.footer}>

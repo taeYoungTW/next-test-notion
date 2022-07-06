@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { revalidateGET } from '../../services/revalidate';
 
 export const getStaticPaths = async () => {
+    console.log('Run: getStaticPaths');
     const notion = new Client({
         auth: process.env.NOTION_API_KEY,
     });
@@ -23,6 +24,7 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async ({ params }: { params: any }) => {
+    console.log(`Run: getStaticProps - ${params.id}`);
     const notion = new Client({ auth: process.env.NOTION_API_KEY });
     try {
         const post = await notion.blocks.children.list({
