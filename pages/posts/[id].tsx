@@ -17,9 +17,11 @@ export const getStaticPaths = async () => {
     //     return { params: { id } };
     // });
 
-    const paths = Array.from(Array(250).keys(), (i) => ({
-        params: { id: (i + 1).toString() },
-    }));
+    const paths = Array.from(Array(1000).keys(), (i) => {
+        return {
+            params: { id: (i + 1).toString() },
+        };
+    });
 
     return {
         paths,
@@ -38,11 +40,15 @@ export const getStaticProps = async ({ params }: { params: any }) => {
             // const res = post.results.map((block: any) => ({
             //     text: block[block.type].rich_text[0].text.content,
             // }));
+            const numberId = parseInt(params.id);
+            const id = numberId > 500 ? numberId - 500 : numberId;
             const result = await fetch(
-                `https://jsonplaceholder.typicode.com/comments?id=${params.id}`
+                `https://jsonplaceholder.typicode.com/comments?id=${id}`
             );
             const res = await result.json();
-            return { props: { post: res[0] } };
+            return res.length === 0
+                ? { props: { post: null }, notFound: true }
+                : { props: { post: res[0] } };
         } catch (error) {
             return { props: { post: null }, notFound: true };
         }
