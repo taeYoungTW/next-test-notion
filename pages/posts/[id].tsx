@@ -17,7 +17,7 @@ export const getStaticPaths = async () => {
     //     return { params: { id } };
     // });
 
-    const paths = Array.from(Array(10000).keys(), (i) => {
+    const paths = Array.from(Array(2000).keys(), (i) => {
         return {
             params: { id: (i + 1).toString() },
         };

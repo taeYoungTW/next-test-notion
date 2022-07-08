@@ -60,7 +60,7 @@ const Home: NextPage = () => {
             // const result = await res.json();
 
             await new Promise((resolve) => setTimeout(resolve, 200));
-            setDatabase(Array.from(Array(10000).keys(), (i) => i + 1));
+            setDatabase(Array.from(Array(2000).keys(), (i) => i + 1));
             setIsLoading(false);
         })();
     }, []);
