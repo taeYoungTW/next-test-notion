@@ -42,8 +42,9 @@ export const getStaticProps = async ({ params }: { params: any }) => {
             // }));
             const numberId = parseInt(params.id);
             const id = numberId > 500 ? numberId - 500 : numberId;
+            const noCache = numberId > 500 ? `&t=1` : '';
             const result = await fetch(
-                `https://jsonplaceholder.typicode.com/comments?id=${id}`
+                `https://jsonplaceholder.typicode.com/comments?id=${id}${noCache}`
             );
             const res = await result.json();
             return res.length === 0
