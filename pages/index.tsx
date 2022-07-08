@@ -55,9 +55,12 @@ const Home: NextPage = () => {
     useEffect(() => {
         (async () => {
             setIsLoading(true);
-            const res = await fetch('/api/notion');
-            const result = await res.json();
-            setDatabase(result);
+
+            // const res = await fetch('/api/notion');
+            // const result = await res.json();
+
+            await new Promise((resolve) => setTimeout(resolve, 200));
+            setDatabase(Array.from(Array(500).keys(), (i) => i + 1));
             setIsLoading(false);
         })();
     }, []);
@@ -85,7 +88,18 @@ const Home: NextPage = () => {
                     <div>Loading...</div>
                 ) : (
                     <div className={styles.grid}>
-                        {database?.map(
+                        {database.map((value) => (
+                            <div
+                                className={styles.card}
+                                key={value}
+                                onClick={(e) => handleClick(e, value)}
+                            >
+                                <Link href={`/posts/${value}`}>
+                                    <a> Comment : {value}</a>
+                                </Link>
+                            </div>
+                        ))}
+                        {/* {database?.map(
                             ({ id, createdTime, tag, name, url }) => {
                                 return name?.title[0]?.text ? (
                                     <div
@@ -130,7 +144,7 @@ const Home: NextPage = () => {
                                     </div>
                                 ) : null;
                             }
-                        )}
+                        )} */}
                     </div>
                 )}
             </main>
