@@ -17,7 +17,7 @@ export const getStaticPaths = async () => {
     //     return { params: { id } };
     // });
 
-    const paths = Array.from(Array(500).keys(), (i) => ({
+    const paths = Array.from(Array(250).keys(), (i) => ({
         params: { id: (i + 1).toString() },
     }));
 
@@ -29,22 +29,25 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }: { params: any }) => {
     // const notion = new Client({ auth: process.env.NOTION_API_KEY });
-    try {
-        // const post = await notion.blocks.children.list({
-        //     block_id: params.id,
-        //     page_size: 50,
-        // });
-        // const res = post.results.map((block: any) => ({
-        //     text: block[block.type].rich_text[0].text.content,
-        // }));
-        const result = await fetch(
-            `https://jsonplaceholder.typicode.com/comments?id=${params.id}`
-        );
-        const res = await result.json();
-        return { props: { post: res[0] } };
-    } catch (error) {
-        return { props: { post: null }, notFound: true };
-    }
+    const res = await (async () => {
+        try {
+            // const post = await notion.blocks.children.list({
+            //     block_id: params.id,
+            //     page_size: 50,
+            // });
+            // const res = post.results.map((block: any) => ({
+            //     text: block[block.type].rich_text[0].text.content,
+            // }));
+            const result = await fetch(
+                `https://jsonplaceholder.typicode.com/comments?id=${params.id}`
+            );
+            const res = await result.json();
+            return { props: { post: res[0] } };
+        } catch (error) {
+            return { props: { post: null }, notFound: true };
+        }
+    })();
+    return res;
 };
 
 const Post = ({ post }: { post: any }) => {
