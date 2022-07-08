@@ -17,7 +17,7 @@ export const getStaticPaths = async () => {
     //     return { params: { id } };
     // });
 
-    const paths = Array.from(Array(1000).keys(), (i) => {
+    const paths = Array.from(Array(10000).keys(), (i) => {
         return {
             params: { id: (i + 1).toString() },
         };
@@ -40,9 +40,20 @@ export const getStaticProps = async ({ params }: { params: any }) => {
             // const res = post.results.map((block: any) => ({
             //     text: block[block.type].rich_text[0].text.content,
             // }));
+
             const numberId = parseInt(params.id);
-            const id = numberId > 500 ? numberId - 500 : numberId;
-            const noCache = numberId > 500 ? `&t=1` : '';
+            const quotient = numberId / 500;
+            const remainder = numberId % 500;
+
+            let id = 0;
+            let noCache = `&t=${Math.ceil(quotient)}`;
+            if (Number.isInteger(quotient)) {
+                id = 500;
+            } else {
+                id = remainder;
+            }
+            // const id = numberId > 500 ? numberId - 500 : numberId;
+            // const noCache = numberId > 500 ? `&t=1` : '';
             const result = await fetch(
                 `https://jsonplaceholder.typicode.com/comments?id=${id}${noCache}`
             );
