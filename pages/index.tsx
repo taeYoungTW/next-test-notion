@@ -78,7 +78,7 @@ const Home: NextPage = () => {
 
             <main className={styles.main}>
                 <h1 className={styles.title}>Notion API TEST</h1>
-                <div className={styles.description}>🧪 Develop Branch</div>
+                <div className={styles.description}>🧪 Feature Branch ✅</div>
                 <p className={styles.description}>
                     This API get my page of notion!
                 </p>
