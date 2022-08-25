@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export const getStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
     return {
         paths: [],
         fallback: 'blocking',
@@ -23,10 +24,18 @@ interface IProduct {
     images: string[];
 }
 
-export const getStaticProps = async ({ params }: { params: any }) => {
-    const product: IProduct = await axios
-        .get(`https://dummyjson.com/products/${params.id}`)
-        .then((res) => res.data);
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+    let product;
+    if (params?.id === undefined) {
+        return { notFound: true };
+    }
+    try {
+        product = await axios
+            .get(`https://dummyjson.com/products/${params.id}`)
+            .then((res) => res.data);
+    } catch (error) {
+        return { notFound: true };
+    }
     return { props: { product } };
 };
 
