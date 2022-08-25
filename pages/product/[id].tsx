@@ -39,7 +39,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     } catch (error) {
         return { notFound: true };
     }
-    return { props: { product }, revalidate: 10 };
+    return { props: { product } };
 };
 
 interface Props {
