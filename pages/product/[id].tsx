@@ -1,11 +1,14 @@
 import axios from 'axios';
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths = async () => {
+    const paths = Array.from(Array(10).keys(), (i) => ({
+        params: { id: i + 1 },
+    }));
     return {
-        paths: [],
+        paths: paths,
         fallback: 'blocking',
     };
 };
