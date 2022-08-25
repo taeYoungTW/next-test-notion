@@ -8,7 +8,7 @@ export const getStaticPaths = async () => {
         params: { id: `${i + 1}` },
     }));
     return {
-        paths: paths,
+        paths: [],
         fallback: 'blocking',
     };
 };
@@ -63,7 +63,7 @@ const Post = ({ product }: Props) => {
             <div>할인 : {product.discountPercentage} %</div>
             <h2>가격 : {product.price}$</h2>
             <h3> 추천 : {product.rating}</h3>
-            <Link href={'/'}>
+            <Link href={'/'} shallow>
                 <button>
                     <a>Home으로 이동</a>
                 </button>
