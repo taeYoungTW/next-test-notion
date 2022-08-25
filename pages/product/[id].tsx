@@ -39,7 +39,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     } catch (error) {
         return { notFound: true };
     }
-    return { props: { product } };
+    return { props: { product }, revalidate: 10 };
 };
 
 interface Props {
@@ -63,7 +63,7 @@ const Post = ({ product }: Props) => {
             <div>할인 : {product.discountPercentage} %</div>
             <h2>가격 : {product.price}$</h2>
             <h3> 추천 : {product.rating}</h3>
-            <Link href={'/'} shallow>
+            <Link href={'/'}>
                 <button>
                     <a>Home으로 이동</a>
                 </button>

@@ -32,15 +32,11 @@ const Home: NextPage = () => {
                                   className={styles.card}
                                   key={product.id}
                                   onClick={() =>
-                                      router.push(
-                                          `/product/${product.id}`,
-                                          '',
-                                          { shallow: true }
-                                      )
+                                      router.push(`/product/${product.id}`)
                                   }
                               >
                                   <div>ID : {product.id}</div>
-                                  <Link href={`/product/${product.id}`} shallow>
+                                  <Link href={`/product/${product.id}`}>
                                       <a>Title : {product.title}</a>
                                   </Link>
                                   <div>Price : {product.price}$</div>
