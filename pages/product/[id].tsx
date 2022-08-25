@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export const getStaticPaths = async () => {
     const paths = Array.from(Array(10).keys(), (i) => ({
-        params: { id: i + 1 },
+        params: { id: `${i + 1}` },
     }));
     return {
         paths: paths,
