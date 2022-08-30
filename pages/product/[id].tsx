@@ -1,12 +1,16 @@
 import axios from 'axios';
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths = async () => {
+    const paths = Array.from(Array(10).keys(), (i) => ({
+        params: { id: `${i + 1}` },
+    }));
     return {
         paths: [],
-        fallback: 'blocking',
+        fallback: true,
     };
 };
 
@@ -44,6 +48,10 @@ interface Props {
 }
 
 const Post = ({ product }: Props) => {
+    const router = useRouter();
+    if (router.isFallback) {
+        return <div>가져오는 중 ... Fallback : true</div>;
+    }
     return (
         <div>
             <div>상품코드 : {product.id}</div>
