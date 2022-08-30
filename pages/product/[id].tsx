@@ -8,7 +8,7 @@ export const getStaticPaths = async () => {
         params: { id: `${i + 1}` },
     }));
     return {
-        paths: paths,
+        paths: [],
         fallback: 'blocking',
     };
 };
@@ -25,6 +25,7 @@ interface IProduct {
     category: string;
     thumbnail: string;
     images: string[];
+    initTime: string;
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
@@ -39,7 +40,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     } catch (error) {
         return { notFound: true };
     }
-    return { props: { product } };
+    return {
+        props: {
+            product: { ...product, initTime: new Date().toLocaleString() },
+        },
+    };
 };
 
 interface Props {
@@ -49,6 +54,7 @@ interface Props {
 const Post = ({ product }: Props) => {
     return (
         <div>
+            <div>페이지 생성 시간 : {product.initTime}</div>
             <div>상품코드 : {product.id}</div>
             <Image
                 src={product.thumbnail}
