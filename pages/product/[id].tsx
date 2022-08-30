@@ -42,7 +42,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
     return {
         props: {
-            product: { ...product, initTime: new Date().toLocaleString() },
+            product: { ...product, initTime: new Date().toLocaleString('ko') },
         },
     };
 };
