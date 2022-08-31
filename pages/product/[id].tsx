@@ -46,6 +46,15 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         },
     };
 };
+interface ImgLoaderParams {
+    src: string;
+    width?: number;
+    quality?: number;
+}
+
+const imgLoader = ({ src, width, quality }: ImgLoaderParams) => {
+    return src;
+};
 
 interface Props {
     product: IProduct;
@@ -57,6 +66,7 @@ const Post = ({ product }: Props) => {
             <div>페이지 생성 시간 : {product.initTime}</div>
             <div>상품코드 : {product.id}</div>
             <Image
+                loader={imgLoader}
                 src={product.thumbnail}
                 width={300}
                 height={300}
