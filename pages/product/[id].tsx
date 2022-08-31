@@ -8,7 +8,7 @@ export const getStaticPaths = async () => {
         params: { id: `${i + 1}` },
     }));
     return {
-        paths: [],
+        paths: paths,
         fallback: 'blocking',
     };
 };
