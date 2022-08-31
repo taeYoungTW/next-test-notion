@@ -3,6 +3,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import useSWR from 'swr';
 import styles from '../styles/Home.module.css';
 
@@ -15,6 +16,7 @@ const Home: NextPage = () => {
             .then((res) => res.data)
     );
     const router = useRouter();
+    const [id, setId] = useState(1);
     return (
         <div className={styles.container}>
             <Head>
@@ -25,6 +27,17 @@ const Home: NextPage = () => {
             <main className={styles.main}>
                 <h1 className={styles.title}>TEST : ISR COST</h1>
                 <div className={styles.description}>🧪 LIST</div>
+                <input
+                    type="number"
+                    value={id}
+                    onChange={(e) => {
+                        const { value } = e.target;
+                        setId(+value);
+                    }}
+                />
+                <button onClick={() => router.push(`/product/${id}`)}>
+                    custom button : {id}
+                </button>
                 <div className={styles.grid}>
                     {data
                         ? data?.products.map((product) => (
