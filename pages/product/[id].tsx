@@ -4,11 +4,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export const getStaticPaths = async () => {
-    const paths = Array.from(Array(30).keys(), (i) => ({
+    const paths = Array.from(Array(100).keys(), (i) => ({
         params: { id: `${i + 1}` },
     }));
     return {
-        paths: [],
+        paths: paths,
         fallback: 'blocking',
     };
 };
